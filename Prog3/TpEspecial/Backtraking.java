@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Solucion {
+public class Backtraking {
 	
 		// Lista de máquinas disponibles para imprimir piezas
 	    private List<Maquina> maquinas;
@@ -32,7 +32,7 @@ public class Solucion {
 	    }
 	   
 	    // Método principal
-	    public Solucion backtracking(int piezas,ArrayList<Maquina> maquinas) {
+	    public Backtraking backtracking(int piezas,ArrayList<Maquina> maquinas) {
 	        this.maquinas= maquinas;
 	        int piezasImpresas = 0;
 	        ArrayList<Maquina> solucionParcial= new ArrayList<>();
@@ -53,10 +53,7 @@ public class Solucion {
 
 	        } else {
 
-	            //Poda: si aunque use todas las máquinas restantes no llego al total, corto la rama
-	            if (piezasImpresas + CalcularValoresDesdeIndice(indice) < total) {
-	                return; // 
-	            }
+	           
 
 	            // Iteración sobre las máquinas desde el indice
 	            for (int i = indice; i < maquinas.size(); i++) {
@@ -84,13 +81,6 @@ public class Solucion {
 	        return suma;
 	    }
 
-	    // Calcula la suma de los valores de las máquinas desde cierta posición en adelante
-	    public int CalcularValoresDesdeIndice(int indice) {
-	        int suma = 0;
-	        for (int i = indice; i < maquinas.size(); i++) {
-	            suma += maquinas.get(i).getValor();
-	        }
-	        return suma;
-	    }
+	  
 	
 }
