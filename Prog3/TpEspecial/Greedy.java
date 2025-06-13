@@ -36,7 +36,8 @@ public class Greedy {
 		if (total == 0) {
 			return solucion;
 		} else {
-			return null; // no se pudo llegar exactamente al total
+			solucion.limpiarSoluciones();
+			return solucion; // no se pudo llegar exactamente al total
 		}
 	}
 }

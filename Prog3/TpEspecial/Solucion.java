@@ -54,6 +54,9 @@ public class Solucion {
         soluciones.clear();
         soluciones.addAll(nuevaSolucion);
     }
+    public void limpiarSoluciones() {
+        soluciones.clear();
+    }
     public int getSolucionesSize() {
         return soluciones.size();
     }
@@ -66,6 +69,9 @@ public class Solucion {
     }
     @Override
     public String toString() {
+        if(soluciones.isEmpty()){
+            return "No se encontro una solucion para el algoritmo " + getMetodo();
+        }
         return "Metodo: "+ getMetodo()+" ,la cantidad de estados generados "+ getCantidadEstadosGenerados()+" ,el estado de la solucion es "+ getSolucionesString();
     }
 }
