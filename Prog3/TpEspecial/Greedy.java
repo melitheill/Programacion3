@@ -1,48 +1,42 @@
 package TpEspecial;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class Greedy {
 	
 	// Lista de máquinas disponibles para imprimir piezas
     private List<Maquina> maquinas;
+	private Solucion solucion;
 	
-	public ArrayList<Integer> solucionGreddy(int total, ArrayList<Integer> maquinas) {
-	    ArrayList<Integer> solucion = new ArrayList<Integer>();
+	public Solucion solucionGreddy(int total, ArrayList<Maquina> maquinas) {
+		solucion=new Solucion("Greedy");
 
-	    while (!maquinas.isEmpty() && total > 0) {
-	        int indice = maxValor(maquinas);
-	        Integer maquina = maquinas.get(indice);
-	        maquinas.remove(indice); // removemos por índice, no por valor
+		// Ordenar las máquinas por valor descendente (mayor valor primero)
+		Collections.sort(maquinas);
+		Iterator iter = maquinas.iterator();
+		while (iter.hasNext()) {
+			if (total <= 0) break;
 
-	        int cantidad = Math.round(total / maquina); // cuántas veces entra esta maquina
-	        for (int j = 0; j < cantidad; j++) {
-	            solucion.add(maquina);
-	        }
+			Maquina maquina = (Maquina) iter.next();
 
-	        total -= cantidad * maquina; // actualizamos el valor restante
-	    }
+			int valor = maquina.getValor();
+			int cantidad = total / valor;  // tomamos el máximo posible sin pasarnos
 
-	    // Si total llega a 0, devolvemos solución
-	    if (total == 0) {
-	        return solucion;
-	    } else {
-	        return null; // no se pudo llegar exactamente al monto deseado
-	    }
-	}
-
-	
-	public int maxValor(ArrayList<Integer> monedas) {
-		int mayorValor=0;
-		int maquina = 0;
-		for(int i =0;i<maquinas.size();i++) {
-			if(maquinas.get(i).getValor()>mayorValor) {
-				mayorValor= maquinas.get(i).getValor();
-				maquina=i;
+			for (int i = 0; i < cantidad; i++) {
+				solucion.setCantidadEstadosGenerados();
+				solucion.addSoluciones(maquina);
 			}
-		}
-		return maquina;
-	}
 
+			total -= cantidad * valor;
+		}
+
+		if (total == 0) {
+			return solucion;
+		} else {
+			return null; // no se pudo llegar exactamente al total
+		}
+	}
 }
