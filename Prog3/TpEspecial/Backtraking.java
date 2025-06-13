@@ -8,65 +8,43 @@ public class Backtraking {
 	
 		// Lista de máquinas disponibles para imprimir piezas
 	    private List<Maquina> maquinas;
-	    // Lista que guarda la mejor solución encontrada 
-	    private List<Maquina> soluciones;
-	    // Contador de estados generados por el algoritmo
-	    private int cantidadEstadosGenerados;
-	    private String metodo;
-	    
+		private Solucion solucion;
 
-	    public String getMetodo() {
-	        return metodo;
-	    }
-	    public void setMetodo(String metodo) {
-	        this.metodo = metodo;
-	    }
-
-	   
-	    public int getCantidadEstadosGenerados() {
-	        return cantidadEstadosGenerados;
-	    }
-
-	    public void setCantidadEstadosGenerados(int cantidadEstadosGenerados) {
-	        this.cantidadEstadosGenerados = cantidadEstadosGenerados;
-	    }
-	   
 	    // Método principal
-	    public Backtraking backtracking(int piezas,ArrayList<Maquina> maquinas) {
+	    public Solucion backtracking(int piezas,ArrayList<Maquina> maquinas) {
 	        this.maquinas= maquinas;
-	        int piezasImpresas = 0;
+			solucion= new Solucion("Backtraking");
+
 	        ArrayList<Maquina> solucionParcial= new ArrayList<>();
-	        backtrackingRecursivo(piezas,solucionParcial,0,piezasImpresas);
-	        return this;
+	        backtrackingRecursivo(piezas,solucionParcial,0);
+	        return solucion;
 	    }
 	    
 	    // Algoritmo de Backtracking recursivo
-	    public void backtrackingRecursivo(int total, ArrayList<Maquina> solucionParcial, int indice, int piezasImpresas) {
+	    public void backtrackingRecursivo(int total, ArrayList<Maquina> solucionParcial, int indice) {
 
-	        cantidadEstadosGenerados++; // Contabiliza que se generó un nuevo estado
+	        solucion.setCantidadEstadosGenerados(); // Contabiliza que se generó un nuevo estado
 
-	        if (piezasImpresas == total) {
+	        if (solucion.getPiezasImpresas() == total) {
 	            // Se guarda la solución si es la primera, o si es mejor (menos máquinas)
-	            if (soluciones.size() > solucionParcial.size() || soluciones.size() == 0) {
-	                soluciones = new ArrayList<>(solucionParcial);
+	            if (solucion.getSolucionesSize() > solucionParcial.size() || solucion.getSolucionesSize() == 0) {
+	                solucion.addSoluciones(solucionParcial);
 	            }
 
 	        } else {
 
-	           
-
 	            // Iteración sobre las máquinas desde el indice
 	            for (int i = indice; i < maquinas.size(); i++) {
 	                Maquina maquina = maquinas.get(i);
-	                Integer piezasPosibles = piezasImpresas + maquina.getValor();
+	                Integer piezasPosibles = solucion.getPiezasImpresas() + maquina.getValor();
 
 	                // Poda: si me paso del total, no sigo con esta máquina
 	                if (piezasPosibles <= total) {
 	                    solucionParcial.add(maquina);
-	                    piezasImpresas += maquina.getValor();
-	                    backtrackingRecursivo(total, solucionParcial, i, piezasImpresas);
+						solucion.sumarPiezasImpresas(maquina.getValor());
+	                    backtrackingRecursivo(total, solucionParcial, i);
 	                    solucionParcial.remove(solucionParcial.size() - 1);
-	                    piezasImpresas -= maquina.getValor();
+						solucion.restarPiezasImpresas(maquina.getValor());
 	                }
 	            }
 	        }
